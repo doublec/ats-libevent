@@ -12,8 +12,13 @@ The library is best used by cloning from under the $ATSHOME/contrib directory. F
 Note that the makefile for the TESTS will build and delete the tests. If they fail to build - the test failed. To actually build the executable to run you can specify the test on the make command line:
 
     $ cd $ATSHOME/contrib/libevent
-    $ make test01
-    $ make test02
+    $ make http-server
+    $ make download
+
+More information on the using libevent with ATS can be found in these blog posts:
+
+* [Converting C Programs to ATS](http://www.bluishcoder.co.nz/2011/04/24/converting-c-programs-to-ats.html)
+* [Sharing Linear Resources in ATS](http://www.bluishcoder.co.nz/2011/04/25/sharing-linear-resources-in-ats.html)
 
 Comments and suggestions for the wrapper can be made to the author:
 
