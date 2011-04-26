@@ -1,28 +1,21 @@
 staload "prelude/DATS/array.dats"
 staload "contrib/libevent/SATS/libevent.sats"
 staload "prelude/SATS/unsafe.sats"
-%{^
-#include <errno.h>
-#include <stdlib.h>
-#include <string.h>
+staload "libc/SATS/string.sats"
 
-char* get_request_result(struct evhttp_request* req);
-%}
-
-%{
-char* get_request_result(struct evhttp_request* req)
-{
-  struct evbuffer* buf = evhttp_request_get_input_buffer(req);
-  int len = evbuffer_get_length(buf);
-  char *tmp = ATS_MALLOC(len+1);
-  memcpy(tmp, evbuffer_pullup(buf, -1), len);
-  tmp[len] = '\0';
-  return tmp;
-}
-%}
-
-extern fun get_request_result(req: !evhttp_request1): strptr1 = "mac#get_request_result"
 macdef ignore (x) = let val _ = ,(x) in () end
+
+fun get_request_result (req: !evhttp_request1): [l:agz] strptr l = let
+  extern fun __strndup {l:agz} (str: !strptr l, n: size_t): [l2:agz] strptr l2 = "mac#strndup"
+  val (pf_buffer | buffer) = evhttp_request_get_input_buffer(req)
+  val len = evbuffer_get_length(buffer)
+  val (pf_src | src) = evbuffer_pullup(buffer, ssize_of_int(~1))
+  val r = __strndup(src, size1_of_size(len))
+  prval () = pf_src(src)
+  prval () = pf_buffer(buffer)
+in
+  r
+end
 
 viewtypedef env (l1:addr) = @{base= event_base l1, cn= Option_vt (evhttp_connection1), cb= string -> void}
 viewtypedef env = [l1:agz] env(l1)
