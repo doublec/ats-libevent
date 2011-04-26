@@ -253,6 +253,8 @@ fun evhttp_free(http: evhttp1): void = "mac#evhttp_free"
 fun evhttp_set_allowed_methods(http: !evhttp1, methods: uint16):void = "mac#evhttp_set_allowed_methods"
 
 typedef evhttp_callback (t1:viewtype) = (!evhttp_request1, !t1) -> void
+typedef evhttp_callback_ref (t1:viewt@ype) = (!evhttp_request1, &t1) -> void
+
 fun evhttp_set_cb {a:viewtype} (http: !evhttp1, path: string, callback: evhttp_callback (a), arg: !a): [n:int | n == ~2 || n == ~1 || n == 0] int n = "mac#evhttp_set_cb"
 fun evhttp_del_cb(http: !evhttp1, path: string): int = "mac#evhttp_del_cb"
 fun evhttp_set_gencb {a:viewtype} (http: !evhttp1, callback: evhttp_callback (a), arg: !a): void = "mac#evhttp_set_gencb"
@@ -288,6 +290,8 @@ macdef EVHTTP_REQUEST = $extval (evhttp_request_kind, "EVHTTP_REQUEST")
 macdef EVHTTP_RESPONSE = $extval (evhttp_request_kind, "EVHTTP_RESPONSE")
 
 fun evhttp_request_new {a:viewtype} (callback: evhttp_callback (a), arg: !a): evhttp_request0 = "mac#evhttp_request_new"
+fun evhttp_request_new_ref {a:viewt@ype} (callback: evhttp_callback_ref (a), arg: &a): evhttp_request0 = "mac#evhttp_request_new"
+
 fun evhttp_request_set_chunked_cb {a:viewtype} (req: !evhttp_request1, cb: evhttp_callback (a), arg: !a): void = "mac#evhttp_request_set_chunked_cb"
 fun evhttp_request_free(req: evhttp_request1):void = "mac#evhttp_request_free"
 
