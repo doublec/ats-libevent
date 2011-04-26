@@ -152,11 +152,114 @@ void event_set_mem_functions(
 absviewtype evbuffer (l:addr)
 viewtypedef evbuffer0 = [l:addr | l >= null ] evbuffer l
 viewtypedef evbuffer1 = [l:addr | l >  null ] evbuffer l
-
 fun evbuffer_null () :<> evbuffer (null) = "mac#atspre_null_ptr"
 fun evbuffer_is_null {l:addr} (p: !evbuffer l):<> bool (l==null) = "mac#atspre_ptr_is_null"
 fun evbuffer_isnot_null {l:addr} (p: !evbuffer l):<> bool (l > null) = "mac#atspre_ptr_isnot_null"
 overload ~ with evbuffer_isnot_null
+
+absviewtype evbuffer_file_segment (l:addr)
+viewtypedef evbuffer_file_segment0 = [l:addr | l >= null ] evbuffer_file_segment l
+viewtypedef evbuffer_file_segment1 = [l:addr | l >  null ] evbuffer_file_segment l
+fun evbuffer_file_segment_null () :<> evbuffer_file_segment (null) = "mac#atspre_null_ptr"
+fun evbuffer_file_segment_is_null {l:addr} (p: !evbuffer_file_segment l):<> bool (l==null) = "mac#atspre_ptr_is_null"
+fun evbuffer_file_segment_isnot_null {l:addr} (p: !evbuffer_file_segment l):<> bool (l > null) = "mac#atspre_ptr_isnot_null"
+overload ~ with evbuffer_file_segment_isnot_null
+
+absviewtype evbuffer_cb_entry (l:addr)
+viewtypedef evbuffer_cb_entry0 = [l:addr | l >= null ] evbuffer_cb_entry l
+viewtypedef evbuffer_cb_entry1 = [l:addr | l >  null ] evbuffer_cb_entry l
+fun evbuffer_cb_entry_null () :<> evbuffer_cb_entry (null) = "mac#atspre_null_ptr"
+fun evbuffer_cb_entry_is_null {l:addr} (p: !evbuffer_cb_entry l):<> bool (l==null) = "mac#atspre_ptr_is_null"
+fun evbuffer_cb_entry_isnot_null {l:addr} (p: !evbuffer_cb_entry l):<> bool (l > null) = "mac#atspre_ptr_isnot_null"
+overload ~ with evbuffer_cb_entry_isnot_null
+
+
+fun evbuffer_new(): evbuffer0 = "mac#evbuffer_new"
+fun evbuffer_free(buf: evbuffer1):void = "mac#evbuffer_free"
+fun evbuffer_enable_locking {l:addr} (buf: !evbuffer1, lock: ptr l): [n:int | n == ~1 || n == 0] int n = "mac#evbuffer_enable_locking"
+fun evbuffer_lock(buf: !evbuffer1):void = "mac#evbuffer_lock"
+fun evbuffer_unlock(buf: !evbuffer1):void = "mac#evbuffer_unlock"
+fun evbuffer_get_length(buf: !evbuffer1): size_t = "mac#evbuffer_get_length"
+fun evbuffer_get_contiguous_space(buf: !evbuffer1): size_t = "mac#evbuffer_get_contiguous_space"
+fun evbuffer_expand(buf: !evbuffer1, datlen: size_t): [n:int | n == ~1 || n ==0] int n = "mac#evbuffer_expand"
+// TODO: int evbuffer_reserve_space(struct evbuffer *buf, ev_ssize_t size, struct evbuffer_iovec *vec, int n_vecs);
+// TODO: int evbuffer_commit_space(struct evbuffer *buf, struct evbuffer_iovec *vec, int n_vecs);
+fun evbuffer_add {l:agz} (buf: !evbuffer1, data: ptr l, datlen: size_t): [n:int | n == ~1 || n == 0] int n = "mac#evbuffer_add"
+fun evbuffer_remove {l:agz} (buf: !evbuffer1, data: ptr l, datlen: size_t): [n:int | n == ~1 || n == 0] int n = "mac#evbuffer_remove"
+// TODO: ev_ssize_t evbuffer_copyout(struct evbuffer *buf, void *data_out, size_t datlen);
+fun evbuffer_remove_buffer(src: !evbuffer1, dst: !evbuffer1, datlen: size_t): int = "mac#evbuffer_remove_buffer"
+
+abst@ype evbuffer_eol_style = $extype "evbuffer_eol_style"
+macdef EVBUFFER_EOL_ANY = $extval (evbuffer_eol_style, "EVBUFFER_EOL_ANY")
+macdef EVBUFFER_EOL_CRLF = $extval (evbuffer_eol_style, "EVBUFFER_EOL_CRLF")
+macdef EVBUFFER_EOL_CRLF_STRICT = $extval (evbuffer_eol_style, "EVBUFFER_EOL_CRLF_STRICT")
+macdef EVBUFFER_EOL_LF = $extval (evbuffer_eol_style, "EVBUFFER_EOL_LF")
+
+fun evbuffer_readln {l:addr} (buf: !evbuffer1, n_read_out: size_t, eol_style: evbuffer_eol_style): strptr l = "mac#evbuffer_readln"
+fun evbuffer_add_buffer(outbuf: !evbuffer1, inbuf: !evbuffer1): [n:int | n == ~1 || n == 0] int n = "mac#evbuffer_add_buffer"
+// TODO: void (*evbuffer_ref_cleanup_cb)(const void *data, size_t datalen, void *extra);
+// TODO: int evbuffer_add_reference(struct evbuffer *outbuf, const void *data, size_t datlen, evbuffer_ref_cleanup_cb cleanupfn, void *extra);
+// TODO: int evbuffer_add_file(struct evbuffer *output, int fd, ev_off_t offset, ev_off_t length);
+
+macdef EVBUF_FS_CLOSE_ON_FREE = $extval (int, "EVBUF_FS_CLOSE_ON_FREE")
+macdef EVBUF_FS_DISABLE_MMAP = $extval (int, "EVBUF_FS_DISABLE_MMAP")
+macdef EVBUF_FS_DISABLE_SENDFILE = $extval (int, "EVBUF_FS_DISABLE_SENDFILE")
+macdef EVBUF_FS_DISABLE_LOCKING = $extval (int, "EVBUF_FS_DISABLE_LOCKING")
+
+// TODO: struct evbuffer_file_segment *evbuffer_file_segment_new(int fd, ev_off_t offset, ev_off_t length, unsigned flags);
+fun evbuffer_file_segment_free(seg: evbuffer_file_segment1):void = "mac#evbuffer_file_segment_free"
+// TODO: int evbuffer_add_file_segment(struct evbuffer *buf, struct evbuffer_file_segment *seg, ev_off_t offset, ev_off_t length);
+
+// TODO: int evbuffer_add_printf(struct evbuffer *buf, const char *fmt, ...)
+// TODO: int evbuffer_add_vprintf(struct evbuffer *buf, const char *fmt, va_list ap);
+
+fun evbuffer_drain(buf: !evbuffer1, len: size_t): [n:int | n == ~1 || n == 0] int n = "mac#evbuffer_drain"
+// TODO: int evbuffer_write(struct evbuffer *buffer, evutil_socket_t fd);
+// TODO: int evbuffer_write_atmost(struct evbuffer *buffer, evutil_socket_t fd, ev_ssize_t howmuch);
+// TODO: int evbuffer_read(struct evbuffer *buffer, evutil_socket_t fd, int howmuch);
+// TODO: struct evbuffer_ptr evbuffer_search(struct evbuffer *buffer, const char *what, size_t len, const struct evbuffer_ptr *start);
+// TODO: struct evbuffer_ptr evbuffer_search_range(struct evbuffer *buffer, const char *what, size_t len, const struct evbuffer_ptr *start, const struct evbuffer_ptr *end);
+
+abst@ype evbuffer_ptr_how = $extype "evbuffer_ptr_how"
+macdef EVBUFFER_PTR_SET = $extval (evbuffer_ptr_how, "EVBUFFER_PTR_SET")
+macdef EVBUFFER_PTR_ADD = $extval (evbuffer_ptr_how, "EVBUFFER_PTR_ADD")
+
+// TODO: int evbuffer_ptr_set(struct evbuffer *buffer, struct evbuffer_ptr *pos, size_t position, enum evbuffer_ptr_how how);
+// TODO: struct evbuffer_ptr evbuffer_search_eol(struct evbuffer *buffer, struct evbuffer_ptr *start, size_t *eol_len_out, enum evbuffer_eol_style eol_style);
+
+(* TODO:
+struct evbuffer_cb_info {
+	/** The size of */
+	size_t orig_size;
+	size_t n_added;
+	size_t n_deleted;
+};
+*)
+
+// TODO: int evbuffer_peek(struct evbuffer *buffer, ev_ssize_t len, struct evbuffer_ptr *start_at, struct evbuffer_iovec *vec_out, int n_vec);
+// TODO: typedef void (*evbuffer_cb_func)(struct evbuffer *buffer, const struct evbuffer_cb_info *info, void *arg);
+// TODO: struct evbuffer_cb_entry *evbuffer_add_cb(struct evbuffer *buffer, evbuffer_cb_func cb, void *cbarg);
+// TODO: int evbuffer_remove_cb_entry(struct evbuffer *buffer, struct evbuffer_cb_entry *ent);
+// TODO: int evbuffer_remove_cb(struct evbuffer *buffer, evbuffer_cb_func cb, void *cbarg);
+
+macdef EVBUFFER_CB_ENABLED = $extval (int, "EVBUFFER_CB_ENABLED")
+
+// TODO: int evbuffer_cb_set_flags(struct evbuffer *buffer, struct evbuffer_cb_entry *cb, ev_uint32_t flags);
+// TODO: int evbuffer_cb_clear_flags(struct evbuffer *buffer, struct evbuffer_cb_entry *cb, ev_uint32_t flags);
+fun evbuffer_pullup (buf: !evbuffer1, size: ssize_t): [l:agz] (strptr l -<lin,prf> void | strptr l) = "mac#evbuffer_pullup"
+fun evbuffer_prepend {l:agz} (buf: !evbuffer1, data: ptr l, size: size_t): [n:int | n == ~1 || n == 0] int n = "mac#evbuffer_prepend"
+fun evbuffer_prepend_buffer (src: !evbuffer1, dst: !evbuffer1): [n:int | n == ~1 || n == 0] int n = "mac#evbuffer_prepend_buffer"
+fun evbuffer_freeze(buf: !evbuffer1, at_front: int): [n:int | n == ~1 || n == 0] int n = "mac#evbuffer_freeze"
+fun evbuffer_unfreeze(buf: !evbuffer1, at_front: int): [n:int | n == ~1 || n == 0] int n = "mac#evbuffer_unfreeze"
+
+fun evbuffer_defer_callbacks(buf: !evbuffer1, base: !event_base1): int = "mac#evbuffer_defer_callbacks"
+
+
+
+
+
+
+
 
 (* http.h *)
 macdef HTTP_OK = $extval (int, "HTTP_OK")
@@ -325,8 +428,8 @@ fun evhttp_request_get_command(req: !evhttp_request1):evhttp_cmd_type = "mac#evh
 fun evhttp_request_get_response_code(req: !evhttp_request1):int = "mac#evhttp_request_get_response_code"
 fun evhttp_request_get_output_headers(req: !evhttp_request1): (evkeyvalq1 -<lin,prf> void | evkeyvalq1) = "mac#evhttp_request_get_output_headers"
 fun evhttp_request_get_input_headers(req: !evhttp_request1): (evkeyvalq1 -<lin,prf> void | evkeyvalq1) = "mac#evhttp_request_get_input_headers"
-fun evhttp_request_get_input_output_buffer(req: !evhttp_request1): (evbuffer1 -<lin,prf> void | evbuffer1) = "mac#evhttp_request_get_output_buffer"
-fun evhttp_request_get_input_input_buffer(req: !evhttp_request1): (evbuffer1 -<lin,prf> void | evbuffer1) = "mac#evhttp_request_get_input_buffer"
+fun evhttp_request_get_output_buffer(req: !evhttp_request1): (evbuffer1 -<lin,prf> void | evbuffer1) = "mac#evhttp_request_get_output_buffer"
+fun evhttp_request_get_input_buffer(req: !evhttp_request1): (evbuffer1 -<lin,prf> void | evbuffer1) = "mac#evhttp_request_get_input_buffer"
 fun evhttp_request_get_host(req: !evhttp_request1): [l:addr] (strptr l -<lin,prf> void | strptr l) = "mac#evhttp_request_get_host"
 
 fun evhttp_find_header(headers: !evkeyvalq1, key: string): string = "mac#evhttp_find_header"
