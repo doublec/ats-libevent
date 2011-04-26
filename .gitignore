@@ -1,0 +1,4 @@
+*.o
+TEST/download
+TEST/http-server
+*_dats.c
