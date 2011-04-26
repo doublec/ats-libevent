@@ -97,11 +97,7 @@ fun download_url(url: string):void = let
   val () = download_renew_request(url, ctx)
   val _ = event_base_dispatch(ctx.base);
   val () = case+ ctx.cn of
-           | ~Some_vt(c) => let 
-                              val () = evhttp_connection_free(c)
-                            in
-                              ()
-                            end
+           | ~Some_vt(c) => evhttp_connection_free(c)
            | ~None_vt () => ()
   val () = event_base_free(ctx.base);
 in
