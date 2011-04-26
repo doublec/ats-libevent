@@ -72,14 +72,6 @@ implement download_renew_request(url, ctx)= let
                                       castvwtp1 {string} (host),
                                       uint16_of_int(if port < 0 then 80 else port))
   val () = assert_errmsg(~cn, "evhttp_connection_base_new failed")
-  val () = case+ ctx.cn of
-           | ~Some_vt(c) => let 
-                              val () = evhttp_connection_free(c)
-                            in
-                              ()
-                            end
-           | ~None_vt () => ()
-  val () = ctx.cn := None_vt
   val req = evhttp_request_new_ref {env} (download_callback, ctx) 
   val () = assert_errmsg(~req, "evhttp_request_new failed")
   val (pf | headers) = evhttp_request_get_output_headers(req)
