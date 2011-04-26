@@ -10,7 +10,7 @@ fun get_request_result (req: !evhttp_request1): [l:agz] strptr l = let
   val (pf_buffer | buffer) = evhttp_request_get_input_buffer(req)
   val len = evbuffer_get_length(buffer)
   val (pf_src | src) = evbuffer_pullup(buffer, ssize_of_int(~1))
-  val r = __strndup(src, size1_of_size(len))
+  val r = __strndup(src, len)
   prval () = pf_src(src)
   prval () = pf_buffer(buffer)
 in
