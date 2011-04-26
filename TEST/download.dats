@@ -24,7 +24,7 @@ char* get_request_result(struct evhttp_request* req)
 extern fun get_request_result(req: !evhttp_request1): strptr1 = "mac#get_request_result"
 macdef ignore (x) = let val _ = ,(x) in () end
 
-viewtypedef env (l1:addr) = @{base= event_base l1, cn= Option_vt (evhttp_connection1)}
+viewtypedef env (l1:addr) = @{base= event_base l1, cn= Option_vt (evhttp_connection1), cb= string -> void}
 viewtypedef env = [l1:agz] env(l1)
 
 extern fun download_renew_request(url: string, ctx: &env): void
@@ -41,7 +41,7 @@ end
 
 fun document_ok(req: !evhttp_request1, ctx: &env):void = let
   val result = get_request_result(req)
-  val () = print(result)
+  val () = ctx.cb(castvwtp1 {string} (result))
   val () = strptr_free(result)
 in
   ignore(event_base_loopexit(ctx.base, null))
@@ -100,6 +100,7 @@ fun download_url(url: string):void = let
   var ctx:env(null)
   val () = ctx.base := event_base_new()
   val () = ctx.cn := None_vt 
+  val () = ctx.cb := (lam s => printf("%s\n", @(s)))
   val () = assert_errmsg(~ctx.base, "event_base_new failed")
   val () = download_renew_request(url, ctx)
   val _ = event_base_dispatch(ctx.base);
