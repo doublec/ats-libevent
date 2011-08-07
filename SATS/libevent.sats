@@ -39,7 +39,6 @@ fun event_debug_unassign(e: !event1):void = "mac#event_debug_unassign"
 absviewtype event_base (l:addr)
 viewtypedef event_base0 = [l:addr | l >= null ] event_base l
 viewtypedef event_base1 = [l:addr | l >  null ] event_base l
-
 fun event_base_null () :<> event_base (null) = "mac#atspre_null_ptr"
 fun event_base_is_null {l:addr} (p: !event_base l):<> bool (l==null) = "mac#atspre_ptr_is_null"
 fun event_base_isnot_null {l:addr} (p: !event_base l):<> bool (l > null) = "mac#atspre_ptr_isnot_null"
@@ -279,6 +278,7 @@ macdef HTTP_SERVUNAVAIL = $extval(int, "HTTP_SERVUNAVAIL")
 absviewtype evhttp (l:addr)
 viewtypedef evhttp0 = [l:addr | l >= null ] evhttp l
 viewtypedef evhttp1 = [l:addr | l >  null ] evhttp l
+
 fun evhttp_null () :<> evhttp (null) = "mac#atspre_null_ptr"
 fun evhttp_is_null {l:addr} (p: !evhttp l):<> bool (l==null) = "mac#atspre_ptr_is_null"
 fun evhttp_isnot_null {l:addr} (p: !evhttp l):<> bool (l > null) = "mac#atspre_ptr_isnot_null"
@@ -357,6 +357,11 @@ fun evhttp_set_allowed_methods(http: !evhttp1, methods: uint16):void = "mac#evht
 
 typedef evhttp_callback (t1:viewtype) = (!evhttp_request1, !t1) -> void
 typedef evhttp_callback_ref (t1:viewt@ype) = (!evhttp_request1, &t1) -> void
+
+(* Set a callback that receives the base associated with the evhttp as an argument.
+   The proof passed enforces that this base is assocated with the given evhttp.
+ *)
+fun evhttp_set_cb_with_base {l1,l2:agz} (pf: !minus(event_base l2, evhttp l1) | http: !evhttp l1, path: string, callback: {l3:agz} (!evhttp_request l3, !event_base l2) -> void, arg: !event_base l2): [n:int | n == ~2 || n == ~1 || n == 0] int n = "mac#evhttp_set_cb"
 
 fun evhttp_set_cb {a:viewtype} (http: !evhttp1, path: string, callback: evhttp_callback (a), arg: !a): [n:int | n == ~2 || n == ~1 || n == 0] int n = "mac#evhttp_set_cb"
 fun evhttp_del_cb(http: !evhttp1, path: string): int = "mac#evhttp_del_cb"
