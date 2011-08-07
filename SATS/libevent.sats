@@ -55,7 +55,7 @@ overload ~ with event_config_isnot_null
 
 fun event_base_new(): event_base0 = "mac#event_base_new"
 fun event_reinit(base: !event_base1): [n:int | n == 0 || n == ~1 ] int n = "mac#event_reinit"
-fun event_base_dispatch (base: !event_base1):int = "mac#event_base_dispatch"
+fun event_base_dispatch {l1:agz} (base: !event_base l1):int = "mac#event_base_dispatch"
 fun event_base_get_method(base: !event_base1): string = "mac#event_base_get_method"
 // TODO: const char **event_get_supported_methods(void);
 fun event_config_new():event_config0 = "mac#event_config_new"
@@ -342,7 +342,7 @@ overload ~ with evhttp_uri_isnot_null
 
 
 fun evhttp_new {l1:agz} (base: !event_base l1): [l2:agez] (minus(event_base l1, evhttp l2) | evhttp l2) = "mac#evhttp_new"
-fun evhttp_bind_socket(http: !evhttp1, address: string, port: uint16):[n:int | n == 0 || n == ~1] int n = "mac#evhttp_bind_socket"
+fun evhttp_bind_socket {l: addr} (http: !evhttp l, address: string, port: uint16):[n:int | n == 0 || n == ~1] int n = "mac#evhttp_bind_socket"
 fun evhttp_bind_socket_with_handle(http: !evhttp1, address: string, port: uint16): evhttp_bound_socket0 = "mac#evhttp_bind_socket_with_handle"
 // TODO: fun evhttp_accept_socket(http: !evhttp1, evutil_socket_t fd): [n:int | n == 0 || n == ~1] int n = "mac#evhttp_accept_socket"
 // TODO: fun evhttp_accept_socket_with_handle(http: !evhttp1, evutil_socket_t fd): evhttp_bound_socket0 = "mac#evhttp_accept_socket_with_handle"
