@@ -341,7 +341,7 @@ fun evhttp_uri_isnot_null {l:addr} (p: !evhttp_uri l):<> bool (l > null) = "mac#
 overload ~ with evhttp_uri_isnot_null
 
 
-fun evhttp_new(base: !event_base1): evhttp0 = "mac#evhttp_new"
+fun evhttp_new {l1:agz} (base: !event_base l1): [l2:agez] (minus(event_base l1, evhttp l2) | evhttp l2) = "mac#evhttp_new"
 fun evhttp_bind_socket(http: !evhttp1, address: string, port: uint16):[n:int | n == 0 || n == ~1] int n = "mac#evhttp_bind_socket"
 fun evhttp_bind_socket_with_handle(http: !evhttp1, address: string, port: uint16): evhttp_bound_socket0 = "mac#evhttp_bind_socket_with_handle"
 // TODO: fun evhttp_accept_socket(http: !evhttp1, evutil_socket_t fd): [n:int | n == 0 || n == ~1] int n = "mac#evhttp_accept_socket"
@@ -350,7 +350,7 @@ fun evhttp_bind_listener(http: !evhttp1, listener: evconnlistener1): evhttp_boun
 fun evhttp_bound_socket_get_listener(bound: !evhttp_bound_socket1): evconnlistener1 = "mac#evhttp_bound_socket_get_listener"
 fun evhttp_del_accept_socket(http: !evhttp1, bound_socket: evhttp_bound_socket1):void = "mac#evhttp_del_accept_socket"
 // TODO: evutil_socket_t evhttp_bound_socket_get_fd(struct evhttp_bound_socket *bound_socket);
-fun evhttp_free(http: evhttp1): void = "mac#evhttp_free"
+fun evhttp_free {l1,l2:agz} (pf: minus(event_base l1, evhttp l2), base: !event_base l1 | http: evhttp l2): void = "mac#evhttp_free"
 // TODO: void evhttp_set_max_headers_size(struct evhttp* http, ev_ssize_t max_headers_size);
 // TODO: void evhttp_set_max_body_size(struct evhttp* http, ev_ssize_t max_body_size);
 fun evhttp_set_allowed_methods(http: !evhttp1, methods: uint16):void = "mac#evhttp_set_allowed_methods"
