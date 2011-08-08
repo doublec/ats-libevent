@@ -78,7 +78,7 @@ fun event_config_require_features(cfg: !event_config1, feature:int): [n:int | n 
 fun event_config_set_flag(cfg: !event_config1, flag: int):int = "mac#event_config_set_flag"
 fun event_config_set_num_cpus_hint(cfg: !event_config1, cpus: int): [n:int | n == 0 || n == ~1] int n = "mac#event_config_set_num_cpus_hint"
 fun event_base_new_with_config(cfg: !event_config1): event_base0 = "mac_event_base_new_with_config"
-fun event_base_free (p: event_base1):void = "mac#event_base_free"
+fun event_base_free {l:agz} (p: event_base l):void = "mac#event_base_free"
 
 #define _EVENT_LOG_DEBUG 0
 #define _EVENT_LOG_MSG   1
@@ -98,7 +98,7 @@ fun event_base_set(base: !event_base1, e: !event1):int = "mac#event_base_set"
 
 fun event_base_loop(base: !event_base1, flag: int): [n:int | n == ~1 || n == 0 || n == 1] int n = "mac#event_base_loop"
 (* TODO: Handle tv arg *)
-fun event_base_loopexit(base: !event_base1, tv: ptr):[n:int | n == ~1 || n == 0] int n = "mac#event_base_loopexit" 
+fun event_base_loopexit {l:agz} (base: !event_base l, tv: ptr):[n:int | n == ~1 || n == 0] int n = "mac#event_base_loopexit" 
 fun event_base_loopbreak(base: !event_base1):[n:int | n == ~1 || n == 0] int n = "mac#event_base_loopbreak" 
 fun event_base_got_exit(base: !event_base1): [n:int | n >= 0] int n = "mac#event_base_got_exit"
 
@@ -275,13 +275,12 @@ macdef HTTP_INTERNAL = $extval(int, "HTTP_INTERNAL")
 macdef HTTP_NOTIMPLEMENTED = $extval(int, "HTTP_NOTIMPLEMENTED")
 macdef HTTP_SERVUNAVAIL = $extval(int, "HTTP_SERVUNAVAIL")
 
-absviewtype evhttp (l:addr)
-viewtypedef evhttp0 = [l:addr | l >= null ] evhttp l
-viewtypedef evhttp1 = [l:addr | l >  null ] evhttp l
-
-fun evhttp_null () :<> evhttp (null) = "mac#atspre_null_ptr"
-fun evhttp_is_null {l:addr} (p: !evhttp l):<> bool (l==null) = "mac#atspre_ptr_is_null"
-fun evhttp_isnot_null {l:addr} (p: !evhttp l):<> bool (l > null) = "mac#atspre_ptr_isnot_null"
+(* 'lb' is the address of an event_base object that the evhttp object
+   is associated with *)
+absviewtype evhttp (lh:addr, lb:addr)
+fun evhttp_null () :<> [lb:addr] evhttp (null, lb) = "mac#atspre_null_ptr"
+fun evhttp_is_null {lh,lb:addr} (p: !evhttp (lh, lb)):<> bool (lh==null) = "mac#atspre_ptr_is_null"
+fun evhttp_isnot_null {lh,lb:addr} (p: !evhttp (lh, lb)):<> bool (lh > null) = "mac#atspre_ptr_isnot_null"
 overload ~ with evhttp_isnot_null
 
 absviewtype evhttp_request (l:addr)
@@ -341,19 +340,19 @@ fun evhttp_uri_isnot_null {l:addr} (p: !evhttp_uri l):<> bool (l > null) = "mac#
 overload ~ with evhttp_uri_isnot_null
 
 
-fun evhttp_new {l1:agz} (base: !event_base l1): [l2:agez] (minus(event_base l1, evhttp l2) | evhttp l2) = "mac#evhttp_new"
-fun evhttp_bind_socket {l: addr} (http: !evhttp l, address: string, port: uint16):[n:int | n == 0 || n == ~1] int n = "mac#evhttp_bind_socket"
-fun evhttp_bind_socket_with_handle(http: !evhttp1, address: string, port: uint16): evhttp_bound_socket0 = "mac#evhttp_bind_socket_with_handle"
+fun evhttp_new {lb:agz} (base: !event_base lb): [lh:agez] evhttp (lh, lb) = "mac#evhttp_new"
+fun evhttp_bind_socket {lh,lb:agz} (http: !evhttp (lh, lb), address: string, port: uint16):[n:int | n == 0 || n == ~1] int n = "mac#evhttp_bind_socket"
+fun evhttp_bind_socket_with_handle {lh,lb:agz} (http: !evhttp (lh, lb), address: string, port: uint16): evhttp_bound_socket0 = "mac#evhttp_bind_socket_with_handle"
 // TODO: fun evhttp_accept_socket(http: !evhttp1, evutil_socket_t fd): [n:int | n == 0 || n == ~1] int n = "mac#evhttp_accept_socket"
 // TODO: fun evhttp_accept_socket_with_handle(http: !evhttp1, evutil_socket_t fd): evhttp_bound_socket0 = "mac#evhttp_accept_socket_with_handle"
-fun evhttp_bind_listener(http: !evhttp1, listener: evconnlistener1): evhttp_bound_socket0 = "mac#evhttp_bind_listener"
+fun evhttp_bind_listener {lh,lb:agz} (http: !evhttp (lh, lb), listener: evconnlistener1): evhttp_bound_socket0 = "mac#evhttp_bind_listener"
 fun evhttp_bound_socket_get_listener(bound: !evhttp_bound_socket1): evconnlistener1 = "mac#evhttp_bound_socket_get_listener"
-fun evhttp_del_accept_socket(http: !evhttp1, bound_socket: evhttp_bound_socket1):void = "mac#evhttp_del_accept_socket"
+fun evhttp_del_accept_socket {lh,lb:agz} (http: !evhttp (lh, lb), bound_socket: evhttp_bound_socket1):void = "mac#evhttp_del_accept_socket"
 // TODO: evutil_socket_t evhttp_bound_socket_get_fd(struct evhttp_bound_socket *bound_socket);
-fun evhttp_free {l1,l2:agz} (pf: minus(event_base l1, evhttp l2), base: !event_base l1 | http: evhttp l2): void = "mac#evhttp_free"
+fun evhttp_free {lh,lb:agz} (base: !event_base lb | http: evhttp (lh, lb)): void = "mac#evhttp_free"
 // TODO: void evhttp_set_max_headers_size(struct evhttp* http, ev_ssize_t max_headers_size);
 // TODO: void evhttp_set_max_body_size(struct evhttp* http, ev_ssize_t max_body_size);
-fun evhttp_set_allowed_methods(http: !evhttp1, methods: uint16):void = "mac#evhttp_set_allowed_methods"
+fun evhttp_set_allowed_methods {lh,lb:agz} (http: !evhttp (lh, lb), methods: uint16):void = "mac#evhttp_set_allowed_methods"
 
 typedef evhttp_callback (t1:viewtype) = (!evhttp_request1, !t1) -> void
 typedef evhttp_callback_ref (t1:viewt@ype) = (!evhttp_request1, &t1) -> void
@@ -361,19 +360,19 @@ typedef evhttp_callback_ref (t1:viewt@ype) = (!evhttp_request1, &t1) -> void
 (* Set a callback that receives the base associated with the evhttp as an argument.
    The proof passed enforces that this base is assocated with the given evhttp.
  *)
-fun evhttp_set_cb_with_base {l1,l2:agz} (pf: !minus(event_base l2, evhttp l1) | http: !evhttp l1, path: string, callback: {l3:agz} (!evhttp_request l3, !event_base l2) -> void, arg: !event_base l2): [n:int | n == ~2 || n == ~1 || n == 0] int n = "mac#evhttp_set_cb"
+fun evhttp_set_cb_with_base {lh,lb:agz} (http: !evhttp (lh, lb), path: string, callback: {lhr:agz} (!evhttp_request lhr, !event_base lb) -> void, arg: !event_base lb): [n:int | n == ~2 || n == ~1 || n == 0] int n = "mac#evhttp_set_cb"
 
-fun evhttp_set_cb {a:viewtype} (http: !evhttp1, path: string, callback: evhttp_callback (a), arg: !a): [n:int | n == ~2 || n == ~1 || n == 0] int n = "mac#evhttp_set_cb"
-fun evhttp_del_cb(http: !evhttp1, path: string): int = "mac#evhttp_del_cb"
-fun evhttp_set_gencb {a:viewtype} (http: !evhttp1, callback: evhttp_callback (a), arg: !a): void = "mac#evhttp_set_gencb"
+fun evhttp_set_cb {a:viewtype} {lh,lb:agz} (http: !evhttp (lh, lb), path: string, callback: evhttp_callback (a), arg: !a): [n:int | n == ~2 || n == ~1 || n == 0] int n = "mac#evhttp_set_cb"
+fun evhttp_del_cb {lh,lb:agz} (http: !evhttp (lh, lb), path: string): int = "mac#evhttp_del_cb"
+fun evhttp_set_gencb {a:viewtype} {lh,lb:agz} (http: !evhttp (lh, lb), callback: evhttp_callback (a), arg: !a): void = "mac#evhttp_set_gencb"
 
-fun evhttp_add_virtual_host(http: !evhttp1, pattern: string, vhost: !evhttp1): [n:int | n == ~1 || n == 0] int n = "mac#evhttp_add_virtual_host"
-fun evhttp_remove_virtual_host(http: !evhttp1, vhost: !evhttp1): [n:int | n == ~1 || n == 0] int n = "mac#evhttp_remote_virtual_host"
+fun evhttp_add_virtual_host {lh1,lh2,lb1,lb2:agz} (http: !evhttp (lh1, lb1), pattern: string, vhost: !evhttp (lh2, lb2)): [n:int | n == ~1 || n == 0] int n = "mac#evhttp_add_virtual_host"
+fun evhttp_remove_virtual_host {lh1,lh2,lb1,lb2:agz} (http: !evhttp (lh1, lb1), vhost: !evhttp (lh2, lb2)): [n:int | n == ~1 || n == 0] int n = "mac#evhttp_remote_virtual_host"
 
-fun evhttp_add_server_alias(http: !evhttp1, alias: string):int = "mac#evhttp_add_alias"
-fun evhttp_remove_server_alias(http: !evhttp1, alias: string):int = "mac#evhttp_remove_alias"
+fun evhttp_add_server_alias {lh,lb:agz} (http: !evhttp (lh, lb), alias: string):int = "mac#evhttp_add_alias"
+fun evhttp_remove_server_alias {lh,lb:agz} (http: !evhttp (lh, lb), alias: string):int = "mac#evhttp_remove_alias"
 
-fun evhttp_set_timeout(http: !evhttp1, timeout_in_secs: int): void = "mac#evhttp_set_timeout"
+fun evhttp_set_timeout {lh,lb:agz} (http: !evhttp (lh, lb), timeout_in_secs: int): void = "mac#evhttp_set_timeout"
 // TODO: void evhttp_set_timeout_tv(struct evhttp *http, const struct timeval* tv);
 
 fun evhttp_send_error(req: !evhttp_request1, error: int, reason: string): void = "mac#evhttp_send_error"
