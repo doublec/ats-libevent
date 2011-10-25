@@ -4,8 +4,8 @@ ATSHOMEQ="$(ATSHOME)"
 ATSCC=$(ATSHOMEQ)/bin/atscc
 ATSCTRB=\
   $(ATSHOMEQ)/contrib/libevent/atsctrb_libevent.o
-JANSSONCFLAGS=`pkg-config libevent --cflags`
-JANSSONLIBS=`pkg-config libevent --libs`
+CFLAGS=`pkg-config libevent --cflags`
+LIBS=`pkg-config libevent --libs`
 ######
 
 checkall: compall cleanall
@@ -19,11 +19,10 @@ compall: \
 ######
 
 http-server: http-server.dats
-	$(ATSCC) $(JANSSONCFLAGS) -o $@ $< $(ATSCTRB) $(JANSSONLIBS)
+	$(ATSCC) $(CFLAGS) -o $@ $< $(ATSCTRB) $(LIBS)
 
 download: download.dats
-	$(ATSCC) $(JANSSONCFLAGS) -o $@ $< $(ATSCTRB) $(JANSSONLIBS)
-
+	$(ATSCC) $(CFLAGS) -o $@ $< $(ATSCTRB) $(LIBS)
 
 ######
 
