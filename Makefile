@@ -6,14 +6,19 @@
 #
 
 ######
-
+REMOTE=http://github.com/doublec/ats-libevent
 ATSHOMEQ="$(ATSHOME)"
 ATSCC=$(ATSHOMEQ)/bin/atscc -Wall
-JANSSONCFLAGS=`pkg-config libevent --cflags`
+CFLAGS=`pkg-config libevent --cflags`
 
 ######
 
 all: atsctrb_libevent.o clean
+
+######
+
+.git:
+	rm Makefile README.ATS && git clone $(REMOTE) .
 
 ######
 
@@ -23,7 +28,7 @@ atsctrb_libevent.o: libevent_dats.o
 ######
 
 libevent_dats.o: DATS/libevent.dats
-	$(ATSCC) $(XRCFLAGS) -o $@ -c $<
+	$(ATSCC) $(CFLAGS) -o $@ -c $<
 
 ######
 
@@ -32,5 +37,8 @@ clean::
 
 cleanall: clean
 	rm -f atsctrb_libevent.o
+
+cleangit: .git
+	rm -r * && git checkout Makefile README.ATS && rm -rf .git .gitignore
 
 ###### end of [Makefile] ######
