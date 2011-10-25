@@ -13,7 +13,7 @@ CFLAGS=`pkg-config libevent --cflags`
 
 ######
 
-all: atsctrb_libevent.o clean
+all: .git atsctrb_libevent.o clean
 
 ######
 
