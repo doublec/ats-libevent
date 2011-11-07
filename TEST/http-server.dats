@@ -1,3 +1,4 @@
+staload "contrib/libevent/SATS/libevent.sats"
 staload "prelude/DATS/array.dats"
 staload "libc/SATS/signal.sats"
 %{^
@@ -244,40 +245,10 @@ done:
 
 %}
 
-absviewtype event_base (l:addr)
-viewtypedef event_base0 = [l:addr | l >= null ] event_base l
-viewtypedef event_base1 = [l:addr | l >  null ] event_base l
-
-absviewtype evhttp (l:addr)
-viewtypedef evhttp0 = [l:addr | l >= null ] evhttp l
-viewtypedef evhttp1 = [l:addr | l >  null ] evhttp l
-
-absviewtype evhttp_request (l:addr)
-viewtypedef evhttp_request0 = [l:addr | l >= null ] evhttp_request l
-viewtypedef evhttp_request1 = [l:addr | l >  null ] evhttp_request l
-
-extern fun event_base_isnot_null {l:addr} (p: !event_base l):<> bool (l > null) = "atspre_ptr_isnot_null"
-overload ~ with event_base_isnot_null
-
-extern fun evhttp_isnot_null {l:addr} (p: !evhttp l):<> bool (l > null) = "atspre_ptr_isnot_null"
-overload ~ with evhttp_isnot_null
-
-extern fun event_base_new(): event_base0 = "mac#event_base_new"
-extern fun event_base_free (p: event_base1):void = "mac#event_base_free"
-extern fun evhttp_new (base: !event_base1): evhttp0 = "mac#evhttp_new"
-extern fun evhttp_free (http: evhttp1):void = "mac#evhttp_free"
-extern fun evhttp_bind_socket (http: !evhttp1, address: string, port: uint16):int = "mac#evhttp_bind_socket"
-extern fun event_base_dispatch (base: !event_base1):int = "mac#event_base_dispatch"
-
-extern fun dump_request_cb (request: !evhttp_request1, arg: !ptr): void = "mac#dump_request_cb"
-extern fun send_document_cb (request: !evhttp_request1, arg: !string): void = "mac#send_document_cb"
-
-typedef evhttp_callback (t1:viewtype) = (!evhttp_request1, !t1) -<fun1> void
-extern fun evhttp_set_cb {a:viewtype} (http: !evhttp1, path: string, callback: evhttp_callback (a), arg: !a): int = "mac#evhttp_set_cb"
-extern fun evhttp_set_gencb {a:viewtype} (http: !evhttp1, callback: evhttp_callback (a), arg: !a): void = "mac#evhttp_set_gencb"
-extern fun event_base_loopexit (base: !event_base1, tv: ptr):int = "mac#event_base_loopexit" 
-
 macdef ignore (x) = let val _ = ,(x) in () end
+
+extern fun dump_request_cb (req: !evhttp_request1, arg: !ptr): void = "mac#dump_request_cb"
+extern fun send_document_cb (req: !evhttp_request1, arg: !string): void = "mac#send_document_cb"
 
 fn http_server(docroot: string):void = let
   val _ = signal(SIGPIPE, SIG_IGN)
@@ -285,13 +256,13 @@ fn http_server(docroot: string):void = let
   val () = assert_errmsg(~base, "event_base_new failed")
   val http = evhttp_new(base)
   val () = assert_errmsg(~http, "evhttp_new failed")
-  val _ = evhttp_set_cb {ptr} (http, "/dump", dump_request_cb, null)
-  val _ = evhttp_set_cb {event_base1} (http, "/quit", lam (req, arg) => ignore(event_base_loopexit(arg, null)), base)
+  val _ = evhttp_set_cb {ptr} (http, "/dump", dump_request_cb, null) 
+  val _ = evhttp_set_cb_with_base (http, "/quit", lam (req, arg) => ignore(event_base_loopexit(arg, null)), base) 
   val () = evhttp_set_gencb {string} (http, send_document_cb, docroot)
   val r = evhttp_bind_socket(http, "0.0.0.0", uint16_of_int(8080));
   val () = assert_errmsg(r = 0, "evhttp_bind_socket failed")
   val _ = event_base_dispatch(base)
-  val () = evhttp_free(http)
+  val () = evhttp_free(base | http)
   val () = event_base_free(base)
 in
   ()
