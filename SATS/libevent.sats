@@ -184,6 +184,7 @@ fun evbuffer_expand(buf: !evbuffer1, datlen: size_t): [n:int | n == ~1 || n ==0]
 // TODO: int evbuffer_reserve_space(struct evbuffer *buf, ev_ssize_t size, struct evbuffer_iovec *vec, int n_vecs);
 // TODO: int evbuffer_commit_space(struct evbuffer *buf, struct evbuffer_iovec *vec, int n_vecs);
 fun evbuffer_add {l:agz} (buf: !evbuffer1, data: ptr l, datlen: size_t): [n:int | n == ~1 || n == 0] int n = "mac#evbuffer_add"
+fun evbuffer_add_string {n:nat} (buf: !evbuffer1, data: string n, datalen: size_t n): [n:int | n == ~1 || n == 0] int n = "mac#evbuffer_add"
 fun evbuffer_remove {l:agz} (buf: !evbuffer1, data: ptr l, datlen: size_t): [n:int | n == ~1 || n == 0] int n = "mac#evbuffer_remove"
 // TODO: ev_ssize_t evbuffer_copyout(struct evbuffer *buf, void *data_out, size_t datlen);
 fun evbuffer_remove_buffer(src: !evbuffer1, dst: !evbuffer1, datlen: size_t): int = "mac#evbuffer_remove_buffer"

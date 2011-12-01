@@ -14,11 +14,15 @@ checkall: compall cleanall
 
 compall: \
   http-server \
+  http-server2 \
   download
 
 ######
 
 http-server: http-server.dats
+	$(ATSCC) $(CFLAGS) -o $@ $< $(ATSCTRB) $(LIBS)
+
+http-server2: http-server2.dats
 	$(ATSCC) $(CFLAGS) -o $@ $< $(ATSCTRB) $(LIBS)
 
 download: download.dats
@@ -31,6 +35,7 @@ clean:
 
 cleanall: clean
 	rm -f http-server
+	rm -f http-server2
 	rm -f download
 
 ###### end of [Makefile] ######
