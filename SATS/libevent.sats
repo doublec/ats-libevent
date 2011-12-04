@@ -355,7 +355,7 @@ fun evhttp_free {lh,lb:agz} (base: !event_base lb | http: evhttp (lh, lb)): void
 // TODO: void evhttp_set_max_body_size(struct evhttp* http, ev_ssize_t max_body_size);
 fun evhttp_set_allowed_methods {lh,lb:agz} (http: !evhttp (lh, lb), methods: uint16):void = "mac#evhttp_set_allowed_methods"
 
-typedef evhttp_callback (t1:viewtype) = (!evhttp_request1, !t1) -> void
+typedef evhttp_callback (t1:viewt@ype) = (!evhttp_request1, !t1) -> void
 typedef evhttp_callback_ref (t1:viewt@ype) = (!evhttp_request1, &t1) -> void
 
 (* Set a callback that receives the base associated with the evhttp as an argument.
@@ -363,7 +363,9 @@ typedef evhttp_callback_ref (t1:viewt@ype) = (!evhttp_request1, &t1) -> void
  *)
 fun evhttp_set_cb_with_base {lh,lb:agz} (http: !evhttp (lh, lb), path: string, callback: {lhr:agz} (!evhttp_request lhr, !event_base lb) -> void, arg: !event_base lb): [n:int | n == ~2 || n == ~1 || n == 0] int n = "mac#evhttp_set_cb"
 
-fun evhttp_set_cb {a:viewtype} {lh,lb:agz} (http: !evhttp (lh, lb), path: string, callback: evhttp_callback (a), arg: !a): [n:int | n == ~2 || n == ~1 || n == 0] int n = "mac#evhttp_set_cb"
+fun evhttp_set_cb {a:viewt@ype} {l,lh,lb:agz} (pf: !a @ l | http: !evhttp (lh, lb), path: string, callback: evhttp_callback (a), arg: ptr l): [n:int | n == ~2 || n == ~1 || n == 0] int n = "mac#evhttp_set_cb"
+fun evhttp_set_cb_null {lh,lb:agz} (http: !evhttp (lh, lb), path: string, callback: evhttp_callback (ptr), arg: ptr null): [n:int | n == ~2 || n == ~1 || n == 0] int n = "mac#evhttp_set_cb"
+
 fun evhttp_del_cb {lh,lb:agz} (http: !evhttp (lh, lb), path: string): int = "mac#evhttp_del_cb"
 fun evhttp_set_gencb {a:viewtype} {lh,lb:agz} (http: !evhttp (lh, lb), callback: evhttp_callback (a), arg: !a): void = "mac#evhttp_set_gencb"
 

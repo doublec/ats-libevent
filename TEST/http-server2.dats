@@ -35,10 +35,10 @@ implement main () = {
 
   var ctx = @{ base= base }
 
-  val r = evhttp_set_cb {context lb} (http, "/admin", admin_callback, ctx) 
+  val r = evhttp_set_cb {context lb} (view@ ctx | http, "/admin", admin_callback, &ctx) 
   val () = assertloc (r = 0)
 
-  val r = evhttp_set_cb {context lb} (http, "/", main_callback, ctx)
+  val r = evhttp_set_cb {context lb} (view@ ctx | http, "/", main_callback, &ctx)
   val () = assertloc (r = 0)
 
   val r = evhttp_bind_socket(http, "0.0.0.0", uint16_of_int(8080))

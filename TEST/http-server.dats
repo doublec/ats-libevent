@@ -256,7 +256,7 @@ fn http_server(docroot: string):void = let
   val () = assert_errmsg(~base, "event_base_new failed")
   val http = evhttp_new(base)
   val () = assert_errmsg(~http, "evhttp_new failed")
-  val _ = evhttp_set_cb {ptr} (http, "/dump", dump_request_cb, null) 
+  val _ = evhttp_set_cb_null (http, "/dump", dump_request_cb, null) 
   val _ = evhttp_set_cb_with_base (http, "/quit", lam (req, arg) => ignore(event_base_loopexit(arg, null)), base) 
   val () = evhttp_set_gencb {string} (http, send_document_cb, docroot)
   val r = evhttp_bind_socket(http, "0.0.0.0", uint16_of_int(8080));
