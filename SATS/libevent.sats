@@ -437,7 +437,7 @@ fun evhttp_request_get_output_buffer(req: !evhttp_request1): (evbuffer1 -<lin,pr
 fun evhttp_request_get_input_buffer(req: !evhttp_request1): (evbuffer1 -<lin,prf> void | evbuffer1) = "mac#evhttp_request_get_input_buffer"
 fun evhttp_request_get_host(req: !evhttp_request1): [l:addr] (strptr l -<lin,prf> void | strptr l) = "mac#evhttp_request_get_host"
 
-fun evhttp_find_header(headers: !evkeyvalq1, key: string): string = "mac#evhttp_find_header"
+fun evhttp_find_header(headers: !evkeyvalq1, key: string): [l:addr] (strptr l -<lin,prf> void | strptr l) = "mac#evhttp_find_header"
 fun evhttp_remove_header(headers: !evkeyvalq1, key: string): [n:int | n == ~1 || n == 0] int n = "mac#evhttp_remove_header"
 fun evhttp_add_header(headers: !evkeyvalq1, key: string, value: string): [n:int | n == ~1 || n == 0] int n = "mac#evhttp_add_header"
 

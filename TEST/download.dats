@@ -20,14 +20,16 @@ end
 viewtypedef env (l1:addr) = @{base= event_base l1, cn= Option_vt (evhttp_connection1), cb= string -> void}
 viewtypedef env = [l1:agz] env(l1)
 
-extern fun download_renew_request(url: string, ctx: &env): void
+extern fun download_renew_request (url: string, ctx: &env): void
 
 fun document_moved(req: !evhttp_request1, ctx: &env):void = let
-  val (pf | headers) = evhttp_request_get_input_headers(req)
-  val location = evhttp_find_header(headers, "Location")
-  prval () = pf(headers)
-  val () = printf("Moved to %s\n", @(location))
-  val () = download_renew_request(location, ctx)
+  val (pff_headers | headers) = evhttp_request_get_input_headers(req)
+  val (pff_location | location) = evhttp_find_header(headers, "Location")
+  val () = assertloc (strptr_isnot_null (location))
+  val () = printf("Moved to %s\n", @(castvwtp1 {string} (location)))
+  val () = download_renew_request(castvwtp1 {string} (location), ctx)
+  prval () = pff_location (location)
+  prval () = pff_headers(headers)
 in
   ()
 end
