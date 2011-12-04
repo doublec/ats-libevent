@@ -335,7 +335,7 @@ overload ~ with evdns_base
 absviewtype evhttp_uri (l:addr)
 viewtypedef evhttp_uri0 = [l:addr | l >= null ] evhttp_uri l
 viewtypedef evhttp_uri1 = [l:addr | l >  null ] evhttp_uri l
-fun evhttp_uri_null () :<> evhttp_request (null) = "mac#atspre_null_ptr"
+fun evhttp_uri_null () :<> evhttp_uri (null) = "mac#atspre_null_ptr"
 fun evhttp_uri_is_null {l:addr} (p: !evhttp_uri l):<> bool (l==null) = "mac#atspre_ptr_is_null"
 fun evhttp_uri_isnot_null {l:addr} (p: !evhttp_uri l):<> bool (l > null) = "mac#atspre_ptr_isnot_null"
 overload ~ with evhttp_uri_isnot_null
