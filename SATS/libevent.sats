@@ -191,7 +191,7 @@ fun evbuffer_expand(buf: !evbuffer1, datlen: size_t): [n:int | n == ~1 || n ==0]
 // TODO: int evbuffer_reserve_space(struct evbuffer *buf, ev_ssize_t size, struct evbuffer_iovec *vec, int n_vecs);
 // TODO: int evbuffer_commit_space(struct evbuffer *buf, struct evbuffer_iovec *vec, int n_vecs);
 fun evbuffer_add {l:agz} (buf: !evbuffer1, data: ptr l, datlen: size_t): [n:int | n == ~1 || n == 0] int n = "mac#evbuffer_add"
-fun evbuffer_add_string {n:nat} (buf: !evbuffer1, data: string n, datalen: size_t n): [n:int | n == ~1 || n == 0] int n = "mac#evbuffer_add"
+fun evbuffer_add_string {n:nat} (buf: !evbuffer1, data: string n, datalen: sizeLte n): [n:int | n == ~1 || n == 0] int n = "mac#evbuffer_add"
 fun evbuffer_remove {l:agz} (buf: !evbuffer1, data: ptr l, datlen: size_t): [n:int | n == ~1 || n == 0] int n = "mac#evbuffer_remove"
 // TODO: ev_ssize_t evbuffer_copyout(struct evbuffer *buf, void *data_out, size_t datlen);
 fun evbuffer_remove_buffer(src: !evbuffer1, dst: !evbuffer1, datlen: size_t): int = "mac#evbuffer_remove_buffer"
@@ -406,17 +406,17 @@ abst@ype evhttp_request_kind = $extype "evhttp_request_kind"
 macdef EVHTTP_REQUEST = $extval (evhttp_request_kind, "EVHTTP_REQUEST")
 macdef EVHTTP_RESPONSE = $extval (evhttp_request_kind, "EVHTTP_RESPONSE")
 
-fun evhttp_request_new {a:viewtype} (callback: evhttp_callback (a), arg: !a): evhttp_request0 = "mac#evhttp_request_new"
+fun evhttp_request_new {a:viewt@ype} (callback: evhttp_callback (a), arg: !a): evhttp_request0 = "mac#evhttp_request_new"
 fun evhttp_request_new_ref {a:viewt@ype} (callback: evhttp_callback_ref (a), arg: &a): evhttp_request0 = "mac#evhttp_request_new"
 
 fun evhttp_request_set_chunked_cb {a:viewtype} (req: !evhttp_request1, cb: evhttp_callback (a), arg: !a): void = "mac#evhttp_request_set_chunked_cb"
 fun evhttp_request_free(req: evhttp_request1):void = "mac#evhttp_request_free"
 
-fun evhttp_connection_base_new(base: !event_base1, dnsbase: ptr, address: string, port: uint16): evhttp_connection1 = "mac#evhttp_connection_base_new"
+fun evhttp_connection_base_new {l:agz} (base: !event_base l, dnsbase: ptr, address: string, port: uint16): evhttp_connection1 = "mac#evhttp_connection_base_new"
 fun evhttp_request_own(req: !evhttp_request1):void = "mac#evhttp_request_own"
 fun evhttp_request_is_owned(req: !evhttp_request1):int = "mac#evhttp_request_own"
 
-fun evhttp_request_get_connection(req: !evhttp_request1): evhttp_connection1 = "mac#evhttp_request_get_connection"
+fun evhttp_request_get_connection(req: !evhttp_request1): [l:agz] (evhttp_connection l -<lin,prf> void | evhttp_connection l) = "mac#evhttp_request_get_connection"
 fun evhttp_connection_get_base(req: !evhttp_connection1): event_base1 = "mac#evhttp_connection_get_base"
 
 // TODO: fun evhttp_connection_set_max_headers_size(evcon: !evhttp_connection, ev_ssize_t new_max_headers_size):void = "mac#evhttp_connection_set_max_headers_size"
@@ -429,7 +429,7 @@ fun evhttp_connection_set_timeout(evcon: !evhttp_connection1, timeout: int):void
 // TODO: void evhttp_connection_set_timeout_tv(struct evhttp_connection *evcon, const struct timeval *tv);
 fun evhttp_connection_set_retries(evcon: !evhttp_connection1, retries: int):void = "mac#evhttp_connection_set_retries"
 
-fun evhttp_connection_set_closecb {a:viewtype} (evcon: !evhttp_connection1, cb: (!evhttp_connection1, !a) -> void, arg: !a):void
+fun evhttp_connection_set_closecb {a:viewt@ype} {l:agz} (evcon: !evhttp_connection l, cb: (!evhttp_connection1, &a) -> void, arg: &a):void = "mac#evhttp_connection_set_closecb"
 
 // TODO: void evhttp_connection_get_peer(struct evhttp_connection *evcon, char **address, ev_uint16_t *port);
 
