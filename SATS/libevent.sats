@@ -17,6 +17,8 @@
 #include "contrib/libevent/CATS/libevent.cats"
 %}
 
+staload "libc/sys/SATS/time.sats"
+
 #define ATS_STALOADFLAG 0 // no need for staloading at run-time
 
 (* Helper definitions *)
@@ -102,19 +104,24 @@ fun event_base_loopexit {l:agz} (base: !event_base l, tv: ptr):[n:int | n == ~1 
 fun event_base_loopbreak(base: !event_base1):[n:int | n == ~1 || n == 0] int n = "mac#event_base_loopbreak" 
 fun event_base_got_exit(base: !event_base1): [n:int | n >= 0] int n = "mac#event_base_got_exit"
 
-#define EV_TIMEOUT	0x01
-#define EV_READ		0x02
-#define EV_WRITE	0x04
-#define EV_SIGNAL	0x08
-#define EV_PERSIST	0x10
-#define EV_ET       0x20
+macdef EV_TIMEOUT = $extval (uint, "EV_TIMEOUT")
+macdef EV_READ    = $extval (uint, "EV_READ")
+macdef EV_WRITE   = $extval (uint, "EV_WRITE")
+macdef EV_SIGNAL  = $extval (uint, "EV_SIGNAL")
+macdef EV_PERSIST = $extval (uint, "EV_PERSIST")
+macdef EV_ET      = $extval (uint, "EV_ET")
 
-// TODO: typedef void (*event_callback_fn)(evutil_socket_t, short, void *);
+abst@ype evutil_socket_t = $extype "evutil_socket_t"
+typedef event_callback_fn (a:viewt@ype) = (evutil_socket_t, sint, &a) -> void
+
 // TODO: int event_assign(struct event *, struct event_base *, evutil_socket_t, short, event_callback_fn, void *);
 // TODO: struct event *event_new(struct event_base *, evutil_socket_t, short, event_callback_fn, void *);
+fun event_new {a:viewt@ype} (base: !event_base1, fd: evutil_socket_t, what: sint, cb: event_callback_fn (a), arg: &a): [l2:addr] event l2 = "mac#event_new"
 fun event_free(e: event1): void = "mac#event_free"
 // TODO: int event_base_once(struct event_base *, evutil_socket_t, short, event_callback_fn, void *, const struct timeval *);
 // TODO: int event_add(struct event *, const struct timeval *);
+fun event_add {l:agz} (ev: !event l, tv: &timeval): [n:int | n == 0 || n == ~1] int n = "mac#event_add"
+fun event_add_null {l:agz} (ev: !event l, tv: ptr null): [n:int | n == 0 || n == ~1] int n = "mac#event_add"
 // TODO: void event_active(struct event *, int, short);
 // TODO: int event_pending(const struct event *, short, struct timeval *);
 fun event_initialized(ev: !event1): [n:int | n == 1 || n == 0] int n = "mac#event_intialized"
