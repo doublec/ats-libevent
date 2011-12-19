@@ -113,10 +113,14 @@ macdef EV_ET      = $extval (uint, "EV_ET")
 
 abst@ype evutil_socket_t = $extype "evutil_socket_t"
 typedef event_callback_fn (a:viewt@ype) = (evutil_socket_t, sint, &a) -> void
+typedef event_callback_fn_noref (a:viewt@ype) = (evutil_socket_t, sint, !a) -> void
+
 
 // TODO: int event_assign(struct event *, struct event_base *, evutil_socket_t, short, event_callback_fn, void *);
 // TODO: struct event *event_new(struct event_base *, evutil_socket_t, short, event_callback_fn, void *);
-fun event_new {a:viewt@ype} (base: !event_base1, fd: evutil_socket_t, what: sint, cb: event_callback_fn (a), arg: &a): [l2:addr] event l2 = "mac#event_new"
+fun event_new {a:viewt@ype} {l:agz} (base: !event_base l, fd: evutil_socket_t, what: sint, cb: event_callback_fn (a), arg: &a): [l2:addr] event l2 = "mac#event_new"
+fun event_new_noref {a:viewt@ype} {l:agz} (base: !event_base l, fd: evutil_socket_t, what: sint, cb: event_callback_fn_noref (a), arg: !a): [l2:addr] event l2 = "mac#event_new"
+
 fun event_free(e: event1): void = "mac#event_free"
 // TODO: int event_base_once(struct event_base *, evutil_socket_t, short, event_callback_fn, void *, const struct timeval *);
 // TODO: int event_add(struct event *, const struct timeval *);
