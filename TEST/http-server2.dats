@@ -3,7 +3,7 @@ staload "contrib/libevent/SATS/libevent.sats"
 viewtypedef context (l1:addr) = @{ base= event_base l1 }
 viewtypedef context = [l:agz] context l
 
-fun admin_callback {l:agz} (req: evhttp_request1, ctx: !context l): void = {
+fun admin_callback {l:agz} (req: evhttp_request1, ctx: &context l): void = {
   val buffer = evbuffer_new ()
   val () = assertloc (~buffer)
   val () = evhttp_send_reply (req, 200, "OK", buffer)
@@ -13,7 +13,7 @@ fun admin_callback {l:agz} (req: evhttp_request1, ctx: !context l): void = {
   val () = assertloc (r = 0)
 }
 
-fun main_callback {l:agz} (req: evhttp_request1, ctx: !context l): void = {
+fun main_callback {l:agz} (req: evhttp_request1, ctx: &context l): void = {
   val buffer = evbuffer_new ()
   val () = assertloc (~buffer)
 
@@ -40,10 +40,10 @@ implement main () = {
 
   var ctx = @{ base= base }
 
-  val r = evhttp_set_cb {context lb} (view@ ctx | http, "/admin", admin_callback, &ctx) 
+  val r = evhttp_set_cb {context lb} (http, "/admin", admin_callback, ctx) 
   val () = assertloc (r = 0)
 
-  val r = evhttp_set_cb {context lb} (view@ ctx | http, "/", main_callback, &ctx)
+  val r = evhttp_set_cb {context lb} (http, "/", main_callback, ctx)
   val () = assertloc (r = 0)
 
   val r = evhttp_bind_socket(http, "0.0.0.0", uint16_of_int(8080))
