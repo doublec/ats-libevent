@@ -366,7 +366,7 @@ fun evhttp_free {lh,lb:agz} (base: !event_base lb | http: evhttp (lh, lb)): void
 // TODO: void evhttp_set_max_body_size(struct evhttp* http, ev_ssize_t max_body_size);
 fun evhttp_set_allowed_methods {lh,lb:agz} (http: !evhttp (lh, lb), methods: uint16):void = "mac#evhttp_set_allowed_methods"
 
-typedef evhttp_callback (t1:viewt@ype) = (!evhttp_request1, !t1) -> void
+typedef evhttp_callback (t1:viewt@ype) = (evhttp_request1, !t1) -> void
 typedef evhttp_callback_ref (t1:viewt@ype) = (!evhttp_request1, &t1) -> void
 
 (* Set a callback that receives the base associated with the evhttp as an argument.
@@ -389,11 +389,11 @@ fun evhttp_remove_server_alias {lh,lb:agz} (http: !evhttp (lh, lb), alias: strin
 fun evhttp_set_timeout {lh,lb:agz} (http: !evhttp (lh, lb), timeout_in_secs: int): void = "mac#evhttp_set_timeout"
 // TODO: void evhttp_set_timeout_tv(struct evhttp *http, const struct timeval* tv);
 
-fun evhttp_send_error(req: !evhttp_request1, error: int, reason: string): void = "mac#evhttp_send_error"
-fun evhttp_send_reply(req: !evhttp_request1, code: int, reason: string, databuf: !evbuffer1): void = "mac#evhttp_send_reply"
+fun evhttp_send_error(req: evhttp_request1, error: int, reason: string): void = "mac#evhttp_send_error"
+fun evhttp_send_reply(req: evhttp_request1, code: int, reason: string, databuf: !evbuffer1): void = "mac#evhttp_send_reply"
 fun evhttp_send_reply_start(req: !evhttp_request1, code:int, reason: string): void = "mac#evhttp_send_reply_start"
 fun evhttp_send_reply_chunk(req: !evhttp_request1, databuf: !evbuffer1):void = "mac#evhttp_send_reply_chunk"
-fun evhttp_send_reply_end(req: !evhttp_request1):void = "mac#evhttp_send_reply_end"
+fun evhttp_send_reply_end(req: evhttp_request1):void = "mac#evhttp_send_reply_end"
 
 typedef evhttp_cmd_type = int
 macdef EVHTTP_REQ_GET = $extval (int, "EVHTTP_REQ_GET")

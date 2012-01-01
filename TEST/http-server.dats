@@ -247,8 +247,8 @@ done:
 
 macdef ignore (x) = let val _ = ,(x) in () end
 
-extern fun dump_request_cb (req: !evhttp_request1, arg: !ptr): void = "mac#dump_request_cb"
-extern fun send_document_cb (req: !evhttp_request1, arg: !string): void = "mac#send_document_cb"
+extern fun dump_request_cb (req: evhttp_request1, arg: !ptr): void = "mac#dump_request_cb"
+extern fun send_document_cb (req: evhttp_request1, arg: !string): void = "mac#send_document_cb"
 
 fn http_server(docroot: string):void = let
   val _ = signal(SIGPIPE, SIG_IGN)
