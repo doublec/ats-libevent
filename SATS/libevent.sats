@@ -395,16 +395,16 @@ fun evhttp_send_reply_start(req: !evhttp_request1, code:int, reason: string): vo
 fun evhttp_send_reply_chunk(req: !evhttp_request1, databuf: !evbuffer1):void = "mac#evhttp_send_reply_chunk"
 fun evhttp_send_reply_end(req: !evhttp_request1):void = "mac#evhttp_send_reply_end"
 
-abst@ype evhttp_cmd_type = $extype "evhttp_cmd_type"
-macdef EVHTTP_REQ_GET = $extval (evhttp_cmd_type, "EVHTTP_REQ_GET")
-macdef EVHTTP_REQ_POST = $extval (evhttp_cmd_type, "EVHTTP_REQ_POST")
-macdef EVHTTP_REQ_HEAD = $extval (evhttp_cmd_type, "EVHTTP_REQ_HEAD")
-macdef EVHTTP_REQ_PUT = $extval (evhttp_cmd_type, "EVHTTP_REQ_PUT")
-macdef EVHTTP_REQ_DELETE = $extval (evhttp_cmd_type, "EVHTTP_REQ_DELETE")
-macdef EVHTTP_REQ_OPTIONS = $extval (evhttp_cmd_type, "EVHTTP_REQ_OPTIONS")
-macdef EVHTTP_REQ_TRACE = $extval (evhttp_cmd_type, "EVHTTP_REQ_TRACE")
-macdef EVHTTP_REQ_CONNECT = $extval (evhttp_cmd_type, "EVHTTP_REQ_CONNECT")
-macdef EVHTTP_REQ_PATCH = $extval (evhttp_cmd_type, "EVHTTP_REQ_PATCH")
+typedef evhttp_cmd_type = int
+macdef EVHTTP_REQ_GET = $extval (int, "EVHTTP_REQ_GET")
+macdef EVHTTP_REQ_POST = $extval (int, "EVHTTP_REQ_POST")
+macdef EVHTTP_REQ_HEAD = $extval (int, "EVHTTP_REQ_HEAD")
+macdef EVHTTP_REQ_PUT = $extval (int, "EVHTTP_REQ_PUT")
+macdef EVHTTP_REQ_DELETE = $extval (int, "EVHTTP_REQ_DELETE")
+macdef EVHTTP_REQ_OPTIONS = $extval (int, "EVHTTP_REQ_OPTIONS")
+macdef EVHTTP_REQ_TRACE = $extval (int, "EVHTTP_REQ_TRACE")
+macdef EVHTTP_REQ_CONNECT = $extval (int, "EVHTTP_REQ_CONNECT")
+macdef EVHTTP_REQ_PATCH = $extval (int, "EVHTTP_REQ_PATCH")
 
 abst@ype evhttp_request_kind = $extype "evhttp_request_kind"
 macdef EVHTTP_REQUEST = $extval (evhttp_request_kind, "EVHTTP_REQUEST")
