@@ -420,7 +420,7 @@ fun evhttp_connection_base_new {l:agz} (base: !event_base l, dnsbase: ptr, addre
 fun evhttp_request_own(req: !evhttp_request1):void = "mac#evhttp_request_own"
 fun evhttp_request_is_owned(req: !evhttp_request1):int = "mac#evhttp_request_own"
 
-fun evhttp_request_get_connection {l:agz} (req: !evhttp_request l): [l:agz] (evhttp_connection l -<lin,prf> void | evhttp_connection l) = "mac#evhttp_request_get_connection"
+fun evhttp_request_get_connection {l:agz} (req: !evhttp_request l): [l:addr] (evhttp_connection l -<lin,prf> void | evhttp_connection l) = "mac#evhttp_request_get_connection"
 fun evhttp_connection_get_base {l:agz} (req: !evhttp_connection l): [l:agz] (event_base l -<lin,prf> void | event_base l) = "mac#evhttp_connection_get_base"
 
 // TODO: fun evhttp_connection_set_max_headers_size(evcon: !evhttp_connection, ev_ssize_t new_max_headers_size):void = "mac#evhttp_connection_set_max_headers_size"
