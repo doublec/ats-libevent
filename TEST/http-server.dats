@@ -40,6 +40,10 @@ static const struct table_entry {
 	{ "png", "image/png" },
 	{ "pdf", "application/pdf" },
 	{ "ps", "application/postsript" },
+	{ "ogv", "video/ogg" },
+	{ "mp4", "video/mp4" },
+
+
 	{ NULL, NULL },
 };
 
@@ -259,7 +263,7 @@ fn http_server(docroot: string):void = let
   val _ = evhttp_set_cb_null (http, "/dump", dump_request_cb, null) 
   val _ = evhttp_set_cb_with_base (http, "/quit", lam (req, arg) => ignore(event_base_loopexit(arg, null)), base) 
   val () = evhttp_set_gencb {string} (http, send_document_cb, docroot)
-  val r = evhttp_bind_socket(http, "0.0.0.0", uint16_of_int(8080));
+  val r = evhttp_bind_socket(http, stropt_some "0.0.0.0", uint16_of_int(8080));
   val () = assert_errmsg(r = 0, "evhttp_bind_socket failed")
   val _ = event_base_dispatch(base)
   val () = evhttp_free(base | http)
