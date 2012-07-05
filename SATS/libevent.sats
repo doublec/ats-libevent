@@ -353,7 +353,7 @@ overload ~ with evhttp_uri_isnot_null
 
 
 fun evhttp_new {lb:agz} (base: !event_base lb): [lh:agez] evhttp (lh, lb) = "mac#evhttp_new"
-fun evhttp_bind_socket {lh,lb:agz} (http: !evhttp (lh, lb), address: string, port: uint16):[n:int | n == 0 || n == ~1] int n = "mac#evhttp_bind_socket"
+fun evhttp_bind_socket {lh,lb:agz} (http: !evhttp (lh, lb), address: Stropt, port: uint16):[n:int | n == 0 || n == ~1] int n = "mac#evhttp_bind_socket"
 fun evhttp_bind_socket_with_handle {lh,lb:agz} (http: !evhttp (lh, lb), address: string, port: uint16): evhttp_bound_socket0 = "mac#evhttp_bind_socket_with_handle"
 // TODO: fun evhttp_accept_socket(http: !evhttp1, evutil_socket_t fd): [n:int | n == 0 || n == ~1] int n = "mac#evhttp_accept_socket"
 // TODO: fun evhttp_accept_socket_with_handle(http: !evhttp1, evutil_socket_t fd): evhttp_bound_socket0 = "mac#evhttp_accept_socket_with_handle"
