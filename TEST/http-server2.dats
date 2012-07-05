@@ -46,7 +46,7 @@ implement main () = {
   val r = evhttp_set_cb {context lb} (http, "/", main_callback, ctx)
   val () = assertloc (r = 0)
 
-  val r = evhttp_bind_socket(http, "0.0.0.0", uint16_of_int(8080))
+  val r = evhttp_bind_socket(http, stropt_some "0.0.0.0", uint16_of_int(8080))
   val () = assertloc (r = 0)
  
   val r = event_base_dispatch(ctx.base)
