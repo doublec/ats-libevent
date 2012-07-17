@@ -98,7 +98,7 @@ fun event_base_set(base: !event_base1, e: !event1):int = "mac#event_base_set"
 #define EVLOOP_ONCE	0x01
 #define EVLOOP_NONBLOCK	0x02
 
-fun event_base_loop(base: !event_base1, flag: int): [n:int | n == ~1 || n == 0 || n == 1] int n = "mac#event_base_loop"
+fun event_base_loop {l:agz} (base: !event_base l, flag: int): [n:int | n == ~1 || n == 0 || n == 1] int n = "mac#event_base_loop"
 (* TODO: Handle tv arg *)
 fun event_base_loopexit {l:agz} (base: !event_base l, tv: ptr):[n:int | n == ~1 || n == 0] int n = "mac#event_base_loopexit" 
 fun event_base_loopbreak(base: !event_base1):[n:int | n == ~1 || n == 0] int n = "mac#event_base_loopbreak" 
