@@ -1,5 +1,6 @@
 *.o
 TEST/download
+TEST/download2
 TEST/http-server
 TEST/http-server2
 *_dats.c
