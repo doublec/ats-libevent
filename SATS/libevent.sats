@@ -101,8 +101,8 @@ fun event_base_set(base: !event_base1, e: !event1):int = "mac#event_base_set"
 fun event_base_loop {l:agz} (base: !event_base l, flag: int): [n:int | n == ~1 || n == 0 || n == 1] int n = "mac#event_base_loop"
 (* TODO: Handle tv arg *)
 fun event_base_loopexit {l:agz} (base: !event_base l, tv: ptr):[n:int | n == ~1 || n == 0] int n = "mac#event_base_loopexit" 
-fun event_base_loopbreak(base: !event_base1):[n:int | n == ~1 || n == 0] int n = "mac#event_base_loopbreak" 
-fun event_base_got_exit(base: !event_base1): [n:int | n >= 0] int n = "mac#event_base_got_exit"
+fun event_base_loopbreak {l:agz} (base: !event_base l):[n:int | n == ~1 || n == 0] int n = "mac#event_base_loopbreak" 
+fun event_base_got_exit {l:agz} (base: !event_base l): [n:int | n >= 0] int n = "mac#event_base_got_exit"
 
 macdef EV_TIMEOUT = $extval (uint, "EV_TIMEOUT")
 macdef EV_READ    = $extval (uint, "EV_READ")
