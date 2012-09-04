@@ -437,7 +437,7 @@ fun evhttp_connection_set_closecb {a:viewt@ype} {l:agz} (evcon: !evhttp_connecti
 
 // TODO: void evhttp_connection_get_peer(struct evhttp_connection *evcon, char **address, ev_uint16_t *port);
 
-fun evhttp_make_request(cn: !evhttp_connection1, req: evhttp_request1, type: evhttp_cmd_type, uri: string):[n:int | n == ~1 || n == 0] int n = "mac#evhttp_make_request"
+fun evhttp_make_request {l,l2:agz} (cn: !evhttp_connection l, req: evhttp_request l2, type: evhttp_cmd_type, uri: string):[n:int | n == ~1 || n == 0] int n = "mac#evhttp_make_request"
 fun evhttp_cancel_request(req: evhttp_request1):void = "mac#evhttp_cancel_request"
 
 fun evhttp_request_get_uri(req: !evhttp_request1): string = "mac#evhttp_request_get_uri"
