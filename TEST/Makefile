@@ -2,8 +2,9 @@
 
 ATSHOMEQ="$(ATSHOME)"
 ATSCC=$(ATSHOMEQ)/bin/atscc
+ATSCCLIB=$(shell pwd)/../..
 ATSCTRB=\
-  $(ATSHOMEQ)/contrib/libevent/atsctrb_libevent.o
+  $(ATSCCLIB)/libevent/atsctrb_libevent.o
 CFLAGS=`pkg-config libevent --cflags`
 LIBS=`pkg-config libevent --libs`
 ######
@@ -21,16 +22,16 @@ compall: \
 ######
 
 http-server: http-server.dats
-	$(ATSCC) $(CFLAGS) -o $@ $< $(ATSCTRB) $(LIBS)
+	$(ATSCC) -I$(ATSCCLIB) -IATS$(ATSCCLIB) $(CFLAGS) -o $@ $< $(ATSCTRB) $(LIBS)
 
 http-server2: http-server2.dats
-	$(ATSCC) $(CFLAGS) -o $@ $< $(ATSCTRB) $(LIBS)
+	$(ATSCC) -I$(ATSCCLIB) -IATS$(ATSCCLIB) $(CFLAGS) -o $@ $< $(ATSCTRB) $(LIBS)
 
 download: download.dats
-	$(ATSCC) $(CFLAGS) -o $@ $< $(ATSCTRB) $(LIBS)
+	$(ATSCC) -I$(ATSCCLIB) -IATS$(ATSCCLIB) $(CFLAGS) -o $@ $< $(ATSCTRB) $(LIBS)
 
 download2: download2.dats
-	$(ATSCC) $(CFLAGS) -o $@ $< $(ATSCTRB) $(LIBS)
+	$(ATSCC) -I$(ATSCCLIB) -IATS$(ATSCCLIB) $(CFLAGS) -o $@ $< $(ATSCTRB) $(LIBS)
 
 ######
 

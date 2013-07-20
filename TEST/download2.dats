@@ -1,5 +1,5 @@
 staload "prelude/SATS/unsafe.sats"
-staload "contrib/libevent/SATS/libevent.sats"
+staload "libevent/SATS/libevent.sats"
 staload _ = "prelude/DATS/array.dats"
 
 fun get_request_input_string (req: !evhttp_request1): [l:agz] strptr l = let

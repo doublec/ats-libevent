@@ -1,17 +1,22 @@
 This is a [ATS](http://www.ats-lang.org) wrapper for the [libevent-2.0](http://monkey.org/~provos/libevent/) library.
 
-The library is best used by cloning from under the $ATSHOME/contrib directory. From there you can run 'make' from the libevent directory and the libevent/TESTS directory.
+The library is best used by cloning from under a parent directory that
+is used to store ATS libraries. This directory can then be passed to the
+'atscc' command line using the '-I' and '-IATS' options to be added to
+the include path. In the examples below this directory is $ATSCCLIB.
 
-    $ cd $ATSHOME/contrib
-    $ git clone git://github.com/doublec/ats-libevent
-    $ cd ats-libevent
+    $ cd $ATSCCLIB
+    $ git clone git://github.com/doublec/ats-libevent libevent
+    $ cd libevent
     $ make
-    $ cd TESTS
+    $ cd TEST
     $ make
 
-Note that the makefile for the TESTS will build and delete the tests. If they fail to build - the test failed. To actually build the executable to run you can specify the test on the make command line:
+Note that the makefile for the TESTS will build and delete the tests. If
+they fail to build - the test failed. To actually build the executable to
+run you can specify the test on the make command line:
 
-    $ cd $ATSHOME/contrib/libevent
+    $ cd $ATSCCLIB/libevent
     $ make http-server
     $ make download
 

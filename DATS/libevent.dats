@@ -13,7 +13,7 @@
 ** ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
 ** OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 *)
-staload "contrib/libevent/SATS/libevent.sats"
+staload "libevent/SATS/libevent.sats"
 #define ATS_DYNLOADFLAG 0 // no need for dynloading at run-time
 
 (* No code here yet *)

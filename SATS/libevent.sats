@@ -14,7 +14,7 @@
 ** OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 *)
 %{#
-#include "contrib/libevent/CATS/libevent.cats"
+#include "libevent/CATS/libevent.cats"
 %}
 
 staload "libc/sys/SATS/time.sats"

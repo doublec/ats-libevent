@@ -1,5 +1,5 @@
 staload "prelude/DATS/array.dats"
-staload "contrib/libevent/SATS/libevent.sats"
+staload "libevent/SATS/libevent.sats"
 staload "prelude/SATS/unsafe.sats"
 staload "libc/SATS/string.sats"
 

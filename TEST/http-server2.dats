@@ -1,4 +1,4 @@
-staload "contrib/libevent/SATS/libevent.sats"
+staload "libevent/SATS/libevent.sats"
 
 viewtypedef context (l1:addr) = @{ base= event_base l1 }
 viewtypedef context = [l:agz] context l

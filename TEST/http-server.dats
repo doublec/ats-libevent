@@ -1,4 +1,4 @@
-staload "contrib/libevent/SATS/libevent.sats"
+staload "libevent/SATS/libevent.sats"
 staload "prelude/DATS/array.dats"
 staload "libc/SATS/signal.sats"
 %{^
